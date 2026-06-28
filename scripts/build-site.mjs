@@ -980,19 +980,25 @@ function bookingPage() {
     title: "Book Online",
     description: "Request a plumbing, heating, boiler or gas engineering appointment online.",
     image: images.hero,
-    body: `<section class="section form-section">
+    body: `<section class="section form-section booking-message-section">
       <form class="booking-form" data-booking-form data-recipient="${business.email}" data-supabase-url="${supabase.url}" data-supabase-key="${supabase.publishableKey}">
-        <label>Name<input name="name" autocomplete="name" required></label>
-        <label>Phone Number<input name="phone" type="tel" autocomplete="tel" required></label>
-        <label>Email<input name="email" type="email" autocomplete="email"></label>
-        <label>Address<input name="address" autocomplete="street-address"></label>
-        <label>Postcode<input name="postcode" autocomplete="postal-code" required></label>
-        <label>Service Required<select name="service" required><option value="">Select a service</option>${servicePages.map((s) => `<option>${s.title}</option>`).join("")}</select></label>
-        <label>Preferred Date<input name="date" type="date"></label>
-        <label>Preferred Time<input name="time" type="time"></label>
-        <label>Upload Photos<input name="photos" type="file" accept="image/*" multiple></label>
-        <label class="full">Message<textarea name="message" rows="5"></textarea></label>
-        <button class="btn btn-primary full" type="submit">Submit Booking Request</button>
+        <div class="booking-form-heading">
+          <p class="eyebrow">Book online</p>
+          <h2>Send Us a Message</h2>
+        </div>
+        <label><span>Your Name</span><input name="name" autocomplete="name" placeholder="Your Name" required></label>
+        <label><span>Email Address</span><input name="email" type="email" autocomplete="email" placeholder="Email Address" required></label>
+        <label><span>Phone Number</span><input name="phone" type="tel" autocomplete="tel" placeholder="Phone Number" required></label>
+        <label><span>Select Service</span><select name="service" required><option value="">Select Service</option>${servicePages.map((s) => `<option>${s.title}</option>`).join("")}</select></label>
+        <label><span>Postcode</span><input name="postcode" autocomplete="postal-code" placeholder="Postcode" required></label>
+        <label><span>Preferred Date</span><input name="date" type="date"></label>
+        <label class="full"><span>Subject</span><input name="subject" placeholder="Subject"></label>
+        <label><span>Address</span><input name="address" autocomplete="street-address" placeholder="Address"></label>
+        <label><span>Preferred Time</span><input name="time" type="time"></label>
+        <label class="full"><span>Your Message</span><textarea name="message" rows="6" placeholder="Your Message"></textarea></label>
+        <label class="full"><span>Upload Photos</span><input name="photos" type="file" accept="image/*" multiple></label>
+        <label class="robot-check full"><input name="human_check" type="checkbox" required><span>I'm not a robot</span></label>
+        <button class="btn btn-primary booking-submit full" type="submit">Submit Now</button>
         <p class="form-confirmation" role="status" hidden></p>
       </form>
     </section>`,

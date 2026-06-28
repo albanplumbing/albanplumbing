@@ -24,6 +24,8 @@ if (bookingForm) {
     const confirmation = bookingForm.querySelector(".form-confirmation");
     const recipient = bookingForm.dataset.recipient || "info@albanplumbing.co.uk";
     const data = new FormData(bookingForm);
+    const subjectLine = String(data.get("subject") || "").trim();
+    const messageBody = String(data.get("message") || "").trim();
     const payload = {
       name: String(data.get("name") || "").trim(),
       phone: String(data.get("phone") || "").trim(),
@@ -33,7 +35,7 @@ if (bookingForm) {
       service_required: String(data.get("service") || "").trim(),
       preferred_date: data.get("date") || null,
       preferred_time: data.get("time") || null,
-      message: String(data.get("message") || "").trim() || null,
+      message: [subjectLine && `Subject: ${subjectLine}`, messageBody].filter(Boolean).join("\n\n") || null,
       source_page: window.location.href,
       user_agent: navigator.userAgent,
     };
@@ -58,9 +60,10 @@ if (bookingForm) {
         `Service Required: ${payload.service_required}`,
         `Preferred Date: ${payload.preferred_date || ""}`,
         `Preferred Time: ${payload.preferred_time || ""}`,
+        `Subject: ${subjectLine}`,
         "",
         "Message:",
-        `${payload.message || ""}`,
+        `${messageBody || ""}`,
         "",
         "Photos: Please attach any photos to this email before sending.",
       ];
@@ -80,7 +83,6 @@ if (bookingForm) {
         method: "POST",
         headers: {
           apikey: supabaseKey,
-          Authorization: `Bearer ${supabaseKey}`,
           "Content-Type": "application/json",
           Prefer: "return=minimal",
         },
