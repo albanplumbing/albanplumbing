@@ -72,14 +72,10 @@ if (bookingForm) {
       window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
     };
 
-    submitButton?.setAttribute("disabled", "disabled");
-    showMessage("Your email app will open with the booking details ready to send.");
-    openEmailDraft();
-
-    try {
+    const saveBooking = async () => {
       const supabaseUrl = bookingForm.dataset.supabaseUrl;
       const supabaseKey = bookingForm.dataset.supabaseKey;
-      if (!supabaseUrl || !supabaseKey) throw new Error("Supabase is not configured.");
+      if (!supabaseUrl || !supabaseKey) return;
 
       const response = await fetch(`${supabaseUrl}/rest/v1/booking_requests`, {
         method: "POST",
@@ -93,15 +89,41 @@ if (bookingForm) {
       });
 
       if (!response.ok) throw new Error(`Supabase returned ${response.status}.`);
+    };
 
-      showMessage("Thank you. Your booking request has been saved. Please send the email draft to complete your enquiry.");
+    const sendEmail = async () => {
+      const endpoint = bookingForm.dataset.emailEndpoint || "/send-booking.php";
+      const response = await fetch(endpoint, {
+        method: "POST",
+        body: data,
+      });
+      let result = null;
+      try {
+        result = await response.json();
+      } catch {
+        throw new Error("The website email endpoint is not running.");
+      }
+      if (!response.ok || !result?.ok) {
+        let message = result?.message || `Email endpoint returned ${response.status}.`;
+        throw new Error(message);
+      }
+    };
+
+    submitButton?.setAttribute("disabled", "disabled");
+    showMessage("Sending your booking request...");
+
+    try {
+      await sendEmail();
+      saveBooking().catch((error) => console.error(error));
+      showMessage("Thank you. Your booking request has been sent successfully.");
       bookingForm.reset();
     } catch (error) {
       console.error(error);
       showMessage(
-        "Your email app has opened with the booking details. Please send the email to complete your enquiry.",
+        "We could not send the email automatically. Your email app will open with the booking details ready to send.",
         true,
       );
+      openEmailDraft();
     } finally {
       submitButton?.removeAttribute("disabled");
     }

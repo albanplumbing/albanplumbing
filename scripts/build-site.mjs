@@ -981,7 +981,7 @@ function bookingPage() {
     description: "Request a plumbing, heating, boiler or gas engineering appointment online.",
     image: images.hero,
     body: `<section class="section form-section booking-message-section">
-      <form class="booking-form" data-booking-form data-recipient="${business.email}" data-supabase-url="${supabase.url}" data-supabase-key="${supabase.publishableKey}">
+      <form class="booking-form" data-booking-form data-recipient="${business.email}" data-email-endpoint="/send-booking.php" data-supabase-url="${supabase.url}" data-supabase-key="${supabase.publishableKey}">
         <div class="booking-form-heading">
           <p class="eyebrow">Book online</p>
           <h2>Send Us a Message</h2>
