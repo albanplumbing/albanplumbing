@@ -3,6 +3,7 @@ import { dirname, join } from "node:path";
 
 const out = process.cwd();
 const baseUrl = "https://www.albanplumbingheating.co.uk";
+const assetVersion = "20260628-email";
 
 const business = {
   name: "Alban Plumbing and Heating Ltd",
@@ -584,14 +585,14 @@ function shell({ path, title, description, content, schema = [], ogImage = image
   <meta name="twitter:description" content="${esc(description)}">
   <meta name="twitter:image" content="${baseUrl}${ogImage}">
   <link rel="preload" as="image" href="${ogImage}" fetchpriority="high">
-  <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=${assetVersion}">
   <script type="application/ld+json">${JSON.stringify(graph)}</script>
 </head>
 <body>
 ${header(path)}
 <main id="main">${content}</main>
 ${footer()}
-<script src="/assets/js/main.js" defer></script>
+<script src="/assets/js/main.js?v=${assetVersion}" defer></script>
 </body>
 </html>`;
 }
